@@ -10,11 +10,15 @@ const MyFoodRequest = () => {
     const [requestFoodcards, setRequestFoodCards] = useState([]); 
     
 // useEffect 
-    useEffect(()=>{
-        axios.get('https://foods-donations-assignment.vercel.app/AddFoodRequest').then(res=>{setRequestFood(res.data)
-        console.log(requestFood);
-    })
-    },[])
+useEffect(() => {
+  axios.get('https://foods-donations-assignment.vercel.app/AddFoodRequest').then(res => {
+      setRequestFood(res.data);
+  });
+}, []);
+
+useEffect(() => {
+  console.log(requestFood);
+}, [requestFood])
 
 
     // delete request 
@@ -75,7 +79,7 @@ const MyFoodRequest = () => {
       {
             requestFood.map((food)=><div key={food?._id}>
                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-         
+                 <Table.Cell>Black</Table.Cell>
           <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{food.food_name}</Table.Cell>
           <Table.Cell>Black</Table.Cell>
           <Table.Cell>Accessories</Table.Cell>

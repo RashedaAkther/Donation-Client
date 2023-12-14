@@ -1,34 +1,32 @@
 /* eslint-disable react/prop-types */
 
 import { useLoaderData } from "react-router-dom";
-import {TbArrowBackUpDouble} from "react-icons/tb"
-import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
-import { useState } from 'react';
+import { TbArrowBackUpDouble } from "react-icons/tb";
+import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Context from "../hook/useContext";
 import Swal from "sweetalert2";
-
+import { FaEye } from "react-icons/fa";
 const ShowFood = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [email, setEmail] = useState('');
-
+  const [email, setEmail] = useState("");
 
   const currentDate = new Date();
   console.log(currentDate);
-const year = currentDate.getFullYear();
-const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-const day = String(currentDate.getDate()).padStart(2, '0');
-const formattedDate = `${year}-${month}-${day}`;
-console.log(formattedDate);
- 
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate);
 
   function onCloseModal() {
     setOpenModal(false);
-    setEmail('');
+    setEmail("");
   }
 
   const food = useLoaderData();
-  const {user} = Context();
+  const { user } = Context();
   // console.log(user);
 
   const {
@@ -43,48 +41,49 @@ console.log(formattedDate);
     expiration_days,
   } = food;
 
-  
+  const handlesumbite = (e) => {
+    e.preventDefault();
+    const form = e.target;
 
-	const handlesumbite =(e)=>{
-		e.preventDefault()
-		const form = e.target;
+    const food_name = form.food_name.value;
+    const food_image = form.food_image.value;
+    const food_quantity = form.food_quantity.value;
+    const pickup_location = form.pickup_location.value;
+    const additional_note = form.additional_note.value;
+    const expiration_days = form.expiration_days.value;
 
-        const food_name = form.food_name.value;
-        const food_image = form.food_image.value;
-        const food_quantity = form.food_quantity.value;
-        const pickup_location = form.pickup_location.value;
-        const additional_note = form.additional_note.value;
-        const expiration_days = form.expiration_days.value;
+    const FoodRequest = {
+      _id,
+      food_name,
+      food_image,
+      food_quantity,
+      pickup_location,
+      additional_note,
+      expiration_days,
+    };
 
+    console.log(FoodRequest);
 
-        const FoodRequest = {_id, food_name, food_image, food_quantity, pickup_location, additional_note, expiration_days }
-
-        console.log(FoodRequest);
-
-		fetch('https://foods-donations-assignment.vercel.app/AddFoodRequest', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(FoodRequest)
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                if(data.insertedId){
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Product Added Successfully',
-                        icon: 'success',
-                        confirmButtonText: 'Done'
-                      })
-                }
-            })
-    
-		
-
-
-	}
+    fetch("https://foods-donations-assignment.vercel.app/AddFoodRequest", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(FoodRequest),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.insertedId) {
+          Swal.fire({
+            title: "Success!",
+            text: "Product Added Successfully",
+            icon: "success",
+            confirmButtonText: "Done",
+          });
+        }
+      });
+  };
 
   return (
     <div className="card p-10">
@@ -105,6 +104,7 @@ console.log(formattedDate);
             </span>
 
             <p>{additional_note}</p>
+            <p className="mt-20 text-xl font-bold flex gap-2"> <span className="pr-2">Viwer:</span>{food?.clickCount} <span className="pl-2 mt-1"><FaEye/></span></p>
           </div>
 
           <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
@@ -182,154 +182,142 @@ console.log(formattedDate);
       </div>
 
       <div className="flex justify-center items-center gap-10">
-      <Link to={'/featureFood'}>  <button className="btn  btn-warning text-white">
+        <Link to={"/featureFood"}>
+          {" "}
+          <button className="btn  btn-warning text-white">
             <TbArrowBackUpDouble></TbArrowBackUpDouble>
-            GO BACK</button></Link>
-        <button onClick={() => setOpenModal(true)} className="btn btn-warning text-white">Food Request</button>
+            GO BACK
+          </button>
+        </Link>
+        <button
+          onClick={() => setOpenModal(true)}
+          className="btn btn-warning text-white"
+        >
+          Food Request
+        </button>
 
-{/* modal code */}
-<Modal show={openModal} size="3xl" onClose={onCloseModal} popup>
-        <Modal.Header />
-        <Modal.Body>
-        <form onSubmit={handlesumbite}>
-        <div className="space-y-2">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request For</h3>
-        
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 justify-around items-center">
+        {/* modal code */}
+        <Modal show={openModal} size="3xl" onClose={onCloseModal} popup>
+          <Modal.Header />
+          <Modal.Body>
+            <form onSubmit={handlesumbite}>
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                  Request For
+                </h3>
 
-            <div className="grid gap-4">
-         <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Food Name" />
-              </div>
-              <TextInput
-                readOnly
-                name="food_name"
-                value={food_name}
-              
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Food Image" />
-              </div>
-              <TextInput
-               readOnly
-               name="food_image"
-                value={ food_image}
-               
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Food Id" />
-              </div>
-              <TextInput
-                readOnly
-                name="_id"
-                value={_id}
-                
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="User Email" />
-              </div>
-              <TextInput
-              type="url"
-               readOnly
-                defaultValue={user?.email}
-                
-              />
-            </div>
-            
-          <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label for="date" value="Request Date" />
-              </div>
-              <TextInput
-              readOnly
-              name="request_date"
-                value={formattedDate}
-                
-              />
-            </div>
-         </div>
-          <div className="grid gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 justify-around items-center">
+                  <div className="grid gap-4">
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Food Name" />
+                      </div>
+                      <TextInput readOnly name="food_name" value={food_name} />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Food Image" />
+                      </div>
+                      <TextInput
+                        readOnly
+                        name="food_image"
+                        value={food_image}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Food Id" />
+                      </div>
+                      <TextInput readOnly name="_id" value={_id} />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="User Email" />
+                      </div>
+                      <TextInput
+                        type="url"
+                        readOnly
+                        defaultValue={user?.email}
+                      />
+                    </div>
 
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="food_quantity" />
-              </div>
-              <TextInput
-               readOnly
-               name="food_quantity"
-                value={food_quantity}
-              
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Pickup-LOcation" />
-              </div>
-              <TextInput
-               readOnly
-               name="pickup_location"
-                value={pickup_location}
-              
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Expire Date" />
-              </div>
-              <TextInput
-               readOnly
-               name="expiration_days"
-                value={expiration_days}
-             
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label  value="Additional Notes" />
-              </div>
-              <TextInput
-               name="additional_note"
-                value={additional_note}
-               
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="mb-2 block">
-                <Label htmlFor="number" value="Donation Money" />
-              </div>
-              <TextInput
-                 name="donation_money"
-                
-              
-              />
-            </div>
-          </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label for="date" value="Request Date" />
+                      </div>
+                      <TextInput
+                        readOnly
+                        name="request_date"
+                        value={formattedDate}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-4">
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="food_quantity" />
+                      </div>
+                      <TextInput
+                        readOnly
+                        name="food_quantity"
+                        value={food_quantity}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Pickup-LOcation" />
+                      </div>
+                      <TextInput
+                        readOnly
+                        name="pickup_location"
+                        value={pickup_location}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Expire Date" />
+                      </div>
+                      <TextInput
+                        readOnly
+                        name="expiration_days"
+                        value={expiration_days}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label value="Additional Notes" />
+                      </div>
+                      <TextInput
+                        name="additional_note"
+                        value={additional_note}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="mb-2 block">
+                        <Label htmlFor="number" value="Donation Money" />
+                      </div>
+                      <TextInput name="donation_money" />
+                    </div>
+                  </div>
+                </div>
 
-            </div>
-            
-            <div className="w-full grid grid-cols-2 justify-center items-center gap-5">
-              {/* <Button onSubmit={handlesumbite}>ADD REQUEST</Button> */}
-              <input onSubmit={handlesumbite} type="submit" className="btn" value="ADD REQUEST" />
-              <Button onClick={onCloseModal}>CANCLE REQUEST</Button>
-            </div>
-           
-          </div>
-        </form>
-        </Modal.Body>
-      </Modal>
-
+                <div className="w-full grid grid-cols-2 justify-center items-center gap-5">
+                  {/* <Button onSubmit={handlesumbite}>ADD REQUEST</Button> */}
+                  <input
+                    onSubmit={handlesumbite}
+                    type="submit"
+                    className="btn"
+                    value="ADD REQUEST"
+                  />
+                  <Button onClick={onCloseModal}>CANCLE REQUEST</Button>
+                </div>
+              </div>
+            </form>
+          </Modal.Body>
+        </Modal>
       </div>
     </div>
   );
 };
 
 export default ShowFood;
-
-

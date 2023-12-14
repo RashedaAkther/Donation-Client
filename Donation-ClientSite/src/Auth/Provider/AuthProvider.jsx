@@ -42,6 +42,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const updeateProfile = (email, name, photoURL) => {
+    console.log(auth.currentUser);
     return updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photoURL,

@@ -13,7 +13,15 @@ const port = 5000;
 //   optionSuccessStatus: 200,
 // };
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5174',
+    "https://foods-donation.netlify.app"
+ 
+],
+credentials: true
+}))
+
 // app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -113,6 +121,17 @@ async function run() {
       const result = await requestFoods.insertOne(Food);
       console.log(result);
       res.send(result);
+    });
+    app.post("/food/click", async (req, res) => {
+      const { foodId } = req.body;
+      const filter = { _id: new ObjectId(foodId) };
+      const updatedService = await featureFoods.findOneAndUpdate(
+        filter,
+        { $inc: { clickCount: 1 } },
+        { returnDocument: 'after' }
+      );
+      console.log(foodId,filter,updatedService);
+      res.send(updatedService);
     });
 
     // request delete

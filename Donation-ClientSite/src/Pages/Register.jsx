@@ -18,38 +18,7 @@ const Register = () => {
 	const passwordvalue = e.target.password.value;
 	const photoUrlValue = e.target.photoUrl.value;
 	
-	// if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{6,}$/.test(passwordvalue)) {
-	// 	console.log("Valid password:", passwordvalue);
-		
-	//   } else {
-	   
-	// 	// toast.error("Password must contain at least one letter and one number, and be at least 8 characters long.");
-	//    alert("Password must contain at least one letter and one number, and be at least 8 characters long.");
-		
-	//   }
-	createUser(emailvalue, passwordvalue)
-		  .then((result) => {
-			console.log(result.user);
-		 
-	alert('You Have SuccessFully Create Account')
-	
-	// const email={emailvalue};
-	updeateProfile(namevalue,photoUrlValue)
-			.then((result) => {
-				// toast.success("User Created SuccessFully")
- navigate('/')
- }).catch((error) => {
-				// An error occurred 
-				// toast.error(error.message)
-			  });
-			  
-	
-		  })
-		  .catch(error => {
-			console.log(error.message);
-			// toast.error(error.message);
-		  });
-	console.log(emailvalue,passwordvalue,namevalue,photoUrlValue);
+
 }
 	
     return (
